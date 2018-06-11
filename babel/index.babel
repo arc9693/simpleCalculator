@@ -1,0 +1,112 @@
+function Square(props) {
+  
+ if(props.value=='BACK'||props.value=='C')
+ return (
+<button type='button' className="squareB btn btn-dark"  onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
+  
+ return (
+<button type='button' className="square btn btn-basic" onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
+}
+
+function Area(props){
+  return (
+    <h1 className="areaa bg-light">{props.value}
+    </h1>
+  );
+}
+
+class Board extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      val:null,
+      exp:[]
+    }
+  }
+  renderArea(){
+    return(<Area value={this.state.exp}/>)
+  }
+  
+  renderSquare(i) {
+    return (
+      <Square value={i} onClick={()=>{
+          if(i==='=')
+            {
+              return this.Calculation(this.state.exp);
+              
+            }
+          else if(i==='BACK')
+            {this.state.exp.pop();
+              return ( this.handleClick());
+            }
+          else if(i==='C')
+            {this.state.exp=[];
+              return ( this.handleClick());
+            }
+          this.state.exp.push(i),
+          this.handleClick()
+         }}
+      />
+    );
+  }
+  
+Calculation(){
+  const st=eval(this.state.exp.join(''));
+   return this.setState({exp: st})
+}
+  
+  handleClick(){
+    return ( this.setState({
+           exp:this.state.exp
+          })
+  )
+  }
+ 
+  render(){
+    return(
+    <div className="container bg-danger">
+         <div className="board">
+      <div className="row">
+        {this.renderArea(this.state.val)}
+      </div>
+     <div className="row">
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
+          {this.renderSquare(3)}
+          {this.renderSquare('+')}
+        </div>
+        <div className="row">
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
+          {this.renderSquare(6)}
+          {this.renderSquare('-')}
+        </div>
+        <div className="row">
+          {this.renderSquare(7)}
+          {this.renderSquare(8)}
+          {this.renderSquare(9)}
+          {this.renderSquare('*')}
+        </div>
+          <div className="row">
+          {this.renderSquare('=')}
+          {this.renderSquare(0)}
+          {this.renderSquare('.')}
+          {this.renderSquare('/')}
+        </div>
+          <div className="row">
+          {this.renderSquare('BACK')}
+          {this.renderSquare('C')}
+           </div></div>
+    </div>);
+  }
+}
+
+ReactDOM.render(
+<Board/>,
+document.getElementById('root'))
